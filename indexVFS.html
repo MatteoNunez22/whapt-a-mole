@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<!-- 
+	vim: ts=2:noexpandtab:sw=2 
+-->
+
+<html>
+
+<head>
+
+	<meta charset="utf-8" />
+	<meta http-equiv="pragma" content="no-cache" />
+	<meta http-equiv="expires" content="-1" />
+	<meta name="viewport" content="width=device-width, user-scalable=no
+		initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>SRL Haptic Shoe Controller</title>
+	<style>
+		@import 'ui/css/evothings-app.css';
+		@import 'app.css';
+	</style>
+
+	<script>
+	// Redirect console.log to Evothings Workbench.
+	if (window.hyper && window.hyper.log) { console.log = hyper.log }
+	</script>
+
+	<script src="cordova.js"></script> <!-- not existing?! gives error on load of easyble.js -->
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/easyble/easyble.js"></script>
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
+	<script src="app.js"></script>
+	<script type='text/javascript'></script>
+
+</head>
+
+<body ontouchstart="">
+	
+
+	<header>
+
+		<!--Icons by Travis Avery from the Noun Project -->
+		<button class="homeButton" onclick="app.goHome()">
+			<img src="ui/images/choice.svg" />
+		</button>
+
+		<button class="backButton" onclick="history.back()">
+			<img src="ui/images/back.svg" />
+		</button>
+
+		<button class="reloadButton" onclick="window.location.reload(true)">
+			<img src="ui/images/refresh.svg" />
+		</button>
+
+		<img class="logotype" src="img/srlLogo_McGill_combined.svg" alt="McGill Shared Reality Lab" />
+		<br/>
+
+	</header>
+
+	<div id="title">
+		<h1> Variable Friction Shoe Controller</h1>
+	</div>
+
+	<div id="startView">	
+
+		<img class="center" src="img/srlLogo.png" alt="McGill Shared Reality Lab" height="150em"/>
+		<button class="stone wide" onclick="app.startScan()">Scan for Shoe</button>
+		<button class="charcoal wide" onclick="app.fakeConnect()">Test w/o Shoe</button>
+	</div>
+
+	<div id="scanResultView" style="display:none"></div>
+
+	<div id="experimentView" style="display:none">
+	</div>
+
+	<div id="sendPatternView" style="display:none">
+		Vibration is being sent...
+	</div>
+
+	<div id="userInfo" style="display:none">
+		<b>Session Parameters</b><br/>
+	 Participant <input type="text" name="ID" value="ID" id="ID" style="width: 50px;" >
+	 <br/>
+
+		<select id= "positions">
+		  <option value="SWWS">SWWS</option>
+		  <option value="WSSW">WSSW</option>
+		</select> 
+		
+		<select id= "position">
+		  <option value="sitting">Sitting</option>
+		  <option value="standing">Standing</option>
+		  <option value="walking">Walking</option>
+		</select>
+
+	 <br/>
+		<select id= "typeExp">
+		  <option value="Test">Test</option>
+		  <option value="Introduction">Introduction</option>
+		  <option value="Training">Training</option>
+		  <option value="Main">Main</option>
+		</select> 
+		
+		<br/>
+
+		<font size="3"> # of patterns </font><input type="text" name="max" value=12 id="max" style="width: 50px;" ><br>
+
+		<button id="userInfo" class="blue wide" onclick="app.userInfo(ID.value, position.value, positions.value, typeExp.value, max.value)">Start</button>
+	</div>
+
+	<div id="selectorView" style="display:none">
+		<button id="sessions" class="stone wide" onclick="app.goSession()">Experiment</button>
+		<button id="freerunning" class="jetblack wide" onclick="app.goFreeRunning()">Manual</button>
+
+		<!--
+		<button class="stone wide" onclick="app.togglePacman()">Hapticman!</button>
+			<div id="pacmanView" style="display:none">
+			    <canvas id="pacmanCanvas" width="300" height="300"></canvas>
+			    <script type="text/javascript" src="Pacman.js"></script>
+			    <script type="text/javascript" src="Ghost.js"></script>
+			    <script type="text/javascript" src="Grid.js"></script>
+			    <script type="text/javascript" src="Game.js"></script>
+			    
+			    <script type="text/javascript">
+			    
+			    function start() {
+			    	app.pacmanStarted = true;
+			    	$('#pacStart').hide();
+			    	$('#pacRestart').hide();
+			    	$('#pacPause').hide();
+			    	$('#pacResume').hide();
+			        clearInterval(intervalId);
+			        gameOn = true;
+			        gamePaused = false;
+			        initMaze();
+			        run();
+			        setTimeout(timeoutView,3000);
+			        return;
+			    }
+
+			 	function restart() {
+			    	$('#pacStart').hide();
+			    	$('#pacRestart').hide();
+			    	$('#pacPause').hide();
+			    	$('#pacResume').hide();
+					restartTimer = 0;
+					clearInterval(intervalId);
+					gameOn = true;
+					gamePaused = false;
+					score = 0;
+					life = MAX_LIFE;
+					beansLeft = MAX_BEANS;
+					initMaze();
+					run();
+					setTimeout(timeoutView,3000);
+					return;
+			    }
+
+			  	function pause() {
+					clearInterval(intervalId);
+					gamePaused = true;
+			    	$('#pacPause').hide();
+			    	$('#pacResume').show();
+					return;
+			    }
+
+			    function resume() {
+					intervalId = setInterval(updateCanvas, timerDelay);
+					gamePaused = false;
+			    	$('#pacPause').show();
+			    	$('#pacResume').hide();
+					return;
+			    }
+
+			    function timeoutView() {
+			    	$('#pacStart').hide();
+			    	$('#pacRestart').show();
+			    	$('#pacPause').show();
+			    	$('#pacResume').hide();
+			    }
+			    
+			    function changeDir(left, right, heel, toe) {
+			        winner = 0;
+			        winnerVal = 0;
+			        if (left > winnerVal){
+			            winner = 1;
+			            winnerVal = left;
+			        }
+			        if (right > winnerVal){
+			            winner = 2;
+			            winnerVal = right;
+			        }
+			        if (heel > winnerVal){
+			            winner = 3;
+			            winnerVal = heel;
+			        }
+			        if (toe + 40 > winnerVal){
+			            winner = 4;
+			            winnerVal = toe;
+			        }
+			        if (winnerVal < 55){
+			            return;
+			        }
+			        switch(winner) {
+			            case 1:
+			                mrPacman.nextDir = mrPacman.dir === LEFT? undefined : LEFT;
+			                //app.playPattern("r");
+			                break;
+			            case 2:
+			                mrPacman.nextDir = mrPacman.dir===RIGHT? undefined : RIGHT;
+			                //app.playPattern("t");
+			                break;
+			            case 3:
+			                mrPacman.nextDir = mrPacman.dir === DOWN? undefined : DOWN;
+			                //app.playPattern("l");
+			                break;
+			            case 4:
+			                mrPacman.nextDir = mrPacman.dir===UP ? undefined: UP;
+			                break;
+			                
+			            default:
+			                break;
+			                
+			        }
+			    }
+			    
+			    </script>
+			    <button id="pacStart" class="charcoal wide" onclick="start()">Start!</button>
+			    <button id="pacRestart" class="charcoal wide" onclick="restart()">Restart</button>
+			    <button id="pacPause" class="charcoal wide" onclick="pause()">Pause</button>
+			    <button id="pacResume" class="charcoal wide" onclick="resume()">Resume</button>
+			</div>
+			-->
+	</div>
+
+
+	<div id="shoeView" style="display:none">
+
+		<div id="gaugeView" style="display:none">
+			<h2>Sensor reading</h2>
+			<!-- Writes the pressure sensor and orientation data to screen -->
+			<div id="dataInfo">
+				Message Rate: <div id="receiveRate" class="fsrData">0</div>Hz
+				<br><br>
+				<div class="fsrData">Left</div>
+				<div class="fsrData">Right</div>
+				<div class="fsrData">Toe</div>
+				<div class="fsrData">Heel</div>
+				<br>
+				<div id="leftData" class="fsrData"></div>
+				<div id="rightData" class="fsrData"></div>
+				<div id="toeData" class="fsrData"></div>
+				<div id="heelData" class="fsrData"></div><br>
+				<div id="coords"></div><br>
+				<canvas id="soleCanvas" width="300" height="300" onclick="app.touchVibration()" ontaphold="app.touchVibration()"></canvas>
+				<br><br>
+				<div class="fsrData">Height</div>
+				<div class="fsrData">Yaw</div>
+				<div class="fsrData">Pitch</div>
+				<div class="fsrData">Roll</div>
+				<br>
+				<div id="heightData" class="fsrData"></div>
+				<div id="yawData" class="fsrData"></div>
+				<div id="pitchData" class="fsrData"></div>
+				<div id="rollData" class="fsrData"></div>
+			</div>
+			
+			<link rel="stylesheet" type="text/css" href="css/flightindicators.css" />
+			<script src="js/jquery.flightindicators.js"></script>
+			<div>
+				<center>
+					<button onclick="app.zeroOut()">Zero</button><br>
+					<span id="attitude"></span>
+					<span id="heading"></span>
+					<span id="altimeter"></span>
+				</center>
+			</div>
+			<script type="text/javascript">
+				var attitude = $.flightIndicator('#attitude', 'attitude', {roll:50, pitch:-20, size:150, showBox : true});
+				var heading = $.flightIndicator('#heading', 'heading', {heading:150, size:150, showBox:true});
+				var altimeter = $.flightIndicator('#altimeter', 'altimeter', {size:150});
+				
+
+				function setAttitude(roll, pitch){
+					    attitude.setRoll(roll);
+	    				attitude.setPitch(pitch);
+				}
+
+				function setHeading(yaw){
+					    heading.setHeading(yaw);
+				}
+
+				function setAltitude(height){
+					    altimeter.setAltitude(height);
+				}
+
+
+			</script>
+		</div>
+
+		<!-- <button id="clear" class="blue" onclick="app.clear()">Clear</button> -->
+
+		<div id="shoeControl" style="width:100%">
+<!--		<button class="blue wide" onclick="app.populatePatterns()">pop</button> -->
+			<button class="stone wide" onclick="app.goHome()">back</button>
+			<button id="charcoal settings" class="stone wide" onclick="app.showSettings()">Settings</button>
+
+			<div id="settingsView" style="display:none">
+				<button id="whichShoe" class="blue wide" onclick="app.updateWhichShoe()"></button>
+				<button id="streamSensorData" class="blue wide" onclick="app.toggleStreaming()"></button>
+				<button id="gauges" class="blue wide" onclick="app.toggleGauges()"></button>
+				<button id="footFall" class="blue wide" onclick="app.toggleFootFall()"></button>
+				<button id="continous" class="blue wide" onclick="app.toggleContinous()"></button>
+
+				<button class="blue"># Buzzes</button>
+				<button class="indigo" onclick="app.setBuzzes(1)">1</button>
+<!--				<button class="indigo" onclick="app.setBuzzes(2)">2</button> -->
+				<button class="indigo" onclick="app.setBuzzes(3)">3</button>
+				<button id="debugLog" class="blue wide" onclick="app.toggleDebugLog()"></button>
+				<button id="mcuDebug" class="blue wide" onclick="app.toggleMCUDebug()"></button>
+			</div>
+			<button id="disconnectButton" class="red wide" onclick="app.disconnect()">Disconnect</button>
+		</div>
+	</div>
+
+	<div id="promptView" style="display:none">
+<!-- <button id="promptButton" onclick="app.goRecord(yes)">Yes</button> -->
+	<button style="height:450px" class="yellow wide" id="promptButton" onclick="app.goRecord(promptButton)">Felt Vibration Pattern</button>
+
+	</div>
+
+	<div id="loadingView" style="display:none">
+
+		<div id="loadingIndicator">
+			<img src="img/loader.gif" />
+			<p id="loadingStatus"></p>
+		</div>
+		
+	</div>
+
+	<div id="resultView" style="display:none">
+		<button class="red wide" onclick="app.goHome()">back</button>
+		<button class="red wide" onclick="app.emailResults()">email results</button>
+	</div>
+
+	<!-- <div id="interResultView" style="display:none">
+		<button class="red wide" onclick="app.resumeExp()">continue</button>
+	</div> -->
+
+	<div id="experimentRightView" style="display:none">
+		<button style="height:450px" class="green wide" id="right" onclick="app.resumeExp()">RIGHT (Click to continue)</button>
+	</div>
+
+	<div id="experimentWrongView" style="display:none">
+		<button style="height:450px" class="red wide" id="wrong" onclick="app.resumeExp()">WRONG (Click to continue)</button>
+	</div>
+
+	<div id="lastExperimentRightView" style="display:none">
+		<button style="height:450px" class="green wide" id="right" >RIGHT </button>
+	</div>
+
+	<div id="lastExperimentWrongView" style="display:none">
+		<button style="height:450px" class="red wide" id="wrong" >WRONG </button>
+	</div>
+
+
+<!-- Individual view for each patterned used for training -->
+	<!-- <div id="th" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('th')">
+			<img src="img/pictograms/1th.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(1)">next</button>
+	</div> -->
+	<!-- <div id="tlh" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('tlh')">
+			<img src="img/pictograms/1tlh.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(2)">next</button>
+	</div> -->
+	<div id="trh" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('tlh')">
+			<img src="img/pictograms/1trh.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(1)">next</button>
+	</div>
+	<!-- <div id="lr" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('lr')">
+			<img src="img/pictograms/1lr.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(4)">next</button>
+	</div> -->
+	<!-- <div id="lrh" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('lrh')">
+			<img src="img/pictograms/1lrh.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(5)">next</button>
+	</div> -->
+	<!-- <div id="lhr" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('lhr')">
+			<img src="img/pictograms/1lhr.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(6)">next</button>
+	</div> -->
+	<!-- <div id="rl" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('rl')">
+			<img src="img/pictograms/1rl.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(7)">next</button>
+	</div> -->
+	<!-- <div id="rlh" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('rlh')">
+			<img src="img/pictograms/1rlh.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(8)">next</button>
+	</div> -->
+	<!-- <div id="rhl" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('rhl')">
+			<img src="img/pictograms/1rhl.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(9)">next</button>
+	</div> -->
+	<!-- <div id="ht" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('ht')">
+			<img src="img/pictograms/1ht.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(10)">next</button>
+	</div> -->
+	<div id="hlt" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('hlt')">
+			<img src="img/pictograms/1hlt.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(2)">next</button>
+	</div>
+	<!-- <div id="hrt" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('hrt')">
+			<img src="img/pictograms/1hrt.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(12)">next</button>
+	</div> -->
+	<!-- <div id="hlr" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('hlr')">
+			<img src="img/pictograms/1hlr.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(13)">next</button>
+	</div> -->
+	<div id="hrl" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('hrl')">
+			<img src="img/pictograms/1hrl.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(3)">next</button>
+	</div>
+	<!-- <div id="t" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('t')">
+			<img src="img/pictograms/1t.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(15)">next</button>
+	</div> -->
+	<!-- <div id="l" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('l')">
+			<img src="img/pictograms/1l.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(16)">next</button>
+	</div> -->
+	<!-- <div id="r" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('r')">
+			<img src="img/pictograms/1r.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(17)">next</button>
+	</div> -->
+	<!-- <div id="h" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('h')">
+			<img src="img/pictograms/1h.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(18)">Home</button>
+	</div> -->
+	<div id="ltr" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('ltr')">
+			<img src="img/pictograms/1ltr.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(4)">next</button>
+	</div>
+	<div id="rlt" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('rlt')">
+			<img src="img/pictograms/1rlt.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(5)">next</button>
+	</div>
+	<div id="rht" style="display:none">
+		<div class="patternContainer" onclick="app.playPattern('rht')">
+			<img src="img/pictograms/1rht.png"/>
+		</div>
+		<button class="red wide" onclick="app.doIntro(0)">Try Again</button>
+		<button class="red wide" onclick="app.doIntro(6)">Home</button>
+	</div>
+
+	
+
+</body>
+
+</html>
