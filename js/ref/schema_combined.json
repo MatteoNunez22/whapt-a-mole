@@ -1,0 +1,49 @@
+{
+	"patterns" : {
+		"iSchemaVersion" : 1,
+		"iPosition" : "walking|standing",
+		"iPositions" : "SWWS",
+		"iSession" : "Introduction|Training|Main",
+    "iSessionIndex" : 1,
+		"iType" : "played|perceived",
+		"iUserID" : "T23",
+
+		"pCorrect" : true,
+		"pCount" : "2",
+		"pIndex": 1,
+		"pPercvd" : "trh",
+		"pPlayed": "trh",
+    "pRepeats": 3,
+		"pResponse" : 79,
+    "pPlayTimes" : { 0: "2016-08-31T09:33:14.123Z", 1: "2016-08-31T09:33:14.123Z" }, 
+
+		"tPhone" : 2016-08-31T09:33:14.123Z,
+		"tServer" : 1472658010000
+	},
+
+	"sensors" : {
+		"iSchemaVersion" : 1,
+		"iUserID" : "T23",
+		"iSession" : "Introduction|Training|Main",
+		"iPositions" : "SWWS",
+		"iPosition" : "walking|standing",
+
+		"oYaw" : 519,
+		"oPitch" : 188,
+		"oRoll" : 184,
+
+		"sFSRheel" : 817,
+		"sFSRleft" : 818,
+		"sFSRtoe" : 846,
+		"sFSRright" : 973,
+
+		"sFlex" : 235,
+		"sProx" : 423,
+
+		"tPhone" : 2016-08-31T09:33:14.123Z,
+		"tServer" : 1472658010000,
+		"tMCU" : 644157
+		}
+	}
+}
+

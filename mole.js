@@ -8,11 +8,28 @@ mole.startContainer = function () {
     $('#shoeButtons').hide();
     $('.experimentButton').hide();
     $('#moleView').show();
-    $('#moleStartbutton').show();
 };
 
 $(document).ready(function() {
 
+    mole.start = function () {
 
+    };
+
+    mole.pause = function () {
+
+    };
+
+    mole.restart = function () {
+
+    };
+
+    mole.rightPress = function () {
+
+    };
+
+    mole.leftPress = function () {
+
+    };
 
 }); //document ready

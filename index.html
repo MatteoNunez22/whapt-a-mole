@@ -30,6 +30,7 @@
 	<script src="libs/jquery/jquery.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
 	<script src="app.js"></script>
+	<script src="mole.js"></script>
 	<script type='text/javascript'></script>
 
 </head>
@@ -118,6 +119,7 @@
 		<button id="freerunning" class="jetblack wide" onclick="app.goFreeRunning()">Manual</button>
 
 		<button class="stone wide" onclick="app.togglePacman()">Hapticman!</button>
+		<button class="jetblack wide" onclick="app.togglePacman()">Hapticman!</button>
 			<div id="pacmanView" style="display:none">
 			    <canvas id="pacmanCanvas" width="300" height="300"></canvas>
 			    <script type="text/javascript" src="Pacman.js"></script>
@@ -234,10 +236,10 @@
 			    <button id="pacPause" class="charcoal wide" onclick="pause()">Pause</button>
 			    <button id="pacResume" class="charcoal wide" onclick="resume()">Resume</button>
 			</div>
-		<button class="jetblack wide" onclick="app.hapticZoomStart()">Haptic Zoom</button>
+		<button class="stone wide" onclick="app.hapticZoomStart()">Haptic Zoom</button>
 
-		<input id="userCommand" type="text" value="Enter command here"></input>		
-		<button class="stone wide" onclick="app.userCommand()">Send Command</button/>	
+		<input id="userCommand" type="text" value="Enter command here">
+		<button class="stone wide" onclick="app.userCommand()">Send Command</button>
 	</div>
 
 	<div id="shoeView" style="display:none">
@@ -414,6 +416,13 @@
 		<button class="stone wide" onclick="app.goHome()">Go Home</button>
 		<button class="stone wide" onclick="app.zoomCal()">Calibrate</button>
 		Haptic Zoom! You're already in testing mode, try leaning on your toe or heel...
+	</div>
+
+	<div id="moleView" style="display:none">
+		<h1>Whapt-A-Mole</h1>
+		<button class="stone wide" onclick="mole.start()">Start</button>
+		<button class="jetblack wide" onclick="mole.pause()">Pause</button>
+		<button class="stone wide" onclick="mole.restart()">Restart</button>
 	</div>
 
 

@@ -1,0 +1,12 @@
+{
+	"v" : 1,
+        "f" : false,
+	"t": "2016-08-29T15:32:38.746Z",
+	"m" : " p 1\n",
+	"s" : true,
+	"d" : false,
+        "x" : true,
+	"e" : "sent error",
+	"u" : "UserID"
+},
+"YYYY-DD-MM-UID":{"version", "connectionFaking", "timestamp", "message", "sent", "debug", "suxxess", "sent error", "userId" }

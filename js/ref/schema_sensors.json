@@ -1,0 +1,13 @@
+{
+	"phoneTime" : 2016-08-31T09:33:14.123Z,
+	"serverTime" : 2016-08-31T09:33:15.123Z,
+	"mcuTime" : 644157,
+	"floorDistance" : 255,
+	"yaw" : 519,
+	"pitch" : 188,
+	"roll" : 184,
+	"fsrRight" : 973,
+	"fsrLeft" : 818,
+	"fsrToes" : 846,
+	"fsrHeel" : 817
+}

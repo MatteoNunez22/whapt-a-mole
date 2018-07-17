@@ -1,0 +1,28 @@
+{
+	"schemaVersion" : 3,
+	"userID" : "T23",
+	"type" : "Main",
+	"conditions" : "SWWS",
+	"condition" : "walking",
+	"start": "2016-08-29T15:32:38.746Z",
+	"end": "2016-08-29T15:40:38.746Z",
+	"patternCount" : "2",
+	"patterns" : {
+		"1" : {
+			"played": "trh",
+			"perceived" : "trh",
+			"correct" : true,
+			"responseDuration" : 79,
+			"repetitions": 1,
+			"responseTime": "2016-08-29T15:36:38.746Z"
+		},
+		"2" : {
+			"played": "rht",
+			"perceived" : "trh",
+			"correct" : false,
+			"responseDuration" : 109,
+			"repetitions": 2,
+			"responseTime": "2016-08-29T15:39:54.853Z"
+		}
+	}
+}

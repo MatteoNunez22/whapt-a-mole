@@ -131,8 +131,8 @@ var app = {};
 
 var expType;
 
-var rightShoe= false;
-var leftShoe = false;
+app.rightShoe = false;
+app.leftShoe = false;
 var finalShoe= true;
 var numShoe= 0;
 
@@ -268,12 +268,12 @@ app.connectTo = function(address,finalShoe) {
 			numShoe += 1;
 			if (device.name == "SRL Haptic Shoe Right"){
 				app.deviceRight = device;
-				rightShoe = true;
+				app.rightShoe = true;
 				app.enableButton('right');
 			}
 			else if (device.name == "SRL Haptic Shoe Left"){
 				app.deviceLeft = device;
-				leftShoe = true;
+				app.leftShoe = true;
 				app.enableButton('left');
 			}
 			console.log('Connected to ' + device.name);
@@ -313,19 +313,19 @@ app.connectTo = function(address,finalShoe) {
 				if(app.deviceRight!=null) {
 					connectMsg=connectMsg.concat("Right Shoe\n");
 					//updateWhichShoe inverses the decision, in order to get accurate initialization have to pretend current shoe is opposite
-					if(rightShoe) rightShoe=false; else rightShoe=true;
+					if(app.rightShoe) app.rightShoe=false; else app.rightShoe=true;
 					app.updateWhichShoe("Right Shoe");
 				}
 				if(app.deviceLeft!=null) {
 					connectMsg=connectMsg.concat("Left Shoe\n");
 					//updateWhichShoe inverses the decision, in order to get accurate initialization have to pretend current shoe is opposite
-					if(leftShoe) leftShoe=false; else leftShoe=true;
+					if(app.leftShoe) app.leftShoe=false; else app.leftShoe=true;
 					app.updateWhichShoe("Left Shoe");
 				}
 				navigator.notification.alert(connectMsg, function() {},"Connected to:");
 			}
 
-			if(rightShoe) {
+			if(app.rightShoe) {
 				app.deviceRight.enableNotification(
 					app.RBL_CHAR_TX_UUID,
 					app.receivedMessageRight,
@@ -338,7 +338,7 @@ app.connectTo = function(address,finalShoe) {
 					}
 				);
 			}
-			if (leftShoe) {
+			if (app.leftShoe) {
 				app.deviceLeft.enableNotification(
 					app.RBL_CHAR_TX_UUID,
 					app.receivedMessageLeft,
@@ -686,16 +686,16 @@ app.updateWhichShoe = function(shoe) {
 
 app.updateLeftShoe = function() {
 	var LSB = document.getElementById("leftShoeButton");
-	if(leftShoe) {
-		leftShoe = false;
+	if(app.leftShoe) {
+		app.leftShoe = false;
 		if(!LSB.disabled) LSB.style.opacity='0.4';
-		if(rightShoe) $('.rightShoeDisplay').css("width","300px");
+		if(app.rightShoe) $('.rightShoeDisplay').css("width","300px");
 		$('.leftShoeDisplay').hide();
 	}
 	else {
-		leftShoe = true;
+		app.leftShoe = true;
 		if (!LSB.disabled) LSB.style.opacity='1';
-		if (rightShoe) {
+		if (app.rightShoe) {
 			$('.rightShoeDisplay').css("width","150px");
 			$('.leftShoeDisplay').css("width","150px");
 		}
@@ -706,16 +706,16 @@ app.updateLeftShoe = function() {
 
 app.updateRightShoe = function() {
 	var RSB = document.getElementById("rightShoeButton");
-	if(rightShoe) {
-		rightShoe = false;
+	if(app.rightShoe) {
+		app.rightShoe = false;
 		if(!RSB.disabled) RSB.style.opacity='0.4';
-		if(leftShoe) $('.leftShoeDisplay').css("width","300px");
+		if(app.leftShoe) $('.leftShoeDisplay').css("width","300px");
 		$('.rightShoeDisplay').hide();
 	}
 	else {
-		rightShoe = true;
+		app.rightShoe = true;
 		if(!RSB.disabled) RSB.style.opacity='1';
-		if(leftShoe) {
+		if(app.leftShoe) {
 			$('.leftShoeDisplay').css("width","150px");
 			$('.rightShoeDisplay').css("width","150px");
 		}
@@ -905,7 +905,7 @@ app.sendMessage = function(message) {
 				data[i] = message.charCodeAt(i);
 			}
 
-			if(rightShoe) {
+			if(app.rightShoe) {
 				app.deviceRight.writeCharacteristic(
 					app.RBL_CHAR_RX_UUID,
 					data,
@@ -1036,6 +1036,10 @@ app.receivedMessageRight = function(data) {
 
 			if ($('#hapticZoomView').is(':visible')) {
             	app.zoomDir(leftVal, rightVal, heelVal, toeVal);
+            }
+
+			if ($('#hapticZoomView').is(':visible')) {
+            	mole.rightPress(leftVal, rightVal, heelVal, toeVal);
             }
 
 			if (app.gauges) {
@@ -1210,6 +1214,10 @@ app.receivedMessageLeft = function(data) {
             	app.zoomDir(leftVal, rightVal, heelVal, toeVal);
             }
 
+            if ($('#hapticZoomView').is(':visible')) {
+                mole.leftPress(leftVal, rightVal, heelVal, toeVal);
+            }
+
 			if (app.gauges) {
 				document.getElementById("leftData").innerHTML = leftVal;
 				document.getElementById("rightData").innerHTML = rightVal;
@@ -1345,7 +1353,7 @@ function touchLocation(event) {
 	//Only sends data if 100ms have passed from the last data send. Needed so that waves dont stack on top of each other
 	if(Date.now() - lastMove > 100) {
 		lastMove = Date.now();
-	  	if(rightShoe) var touchzone = document.getElementById("soleCanvasRight");
+	  	if(app.rightShoe) var touchzone = document.getElementById("soleCanvasRight");
 	  	else var touchzone = document.getElementById('soleCanvasLeft');
 		var canvasWidth = canvas.width;
 		var canvasHeight = canvas.height;
