@@ -1,18 +1,27 @@
 var mole = {
     id: "",
+    a: false,
+    b: false,
+    c: false,
+    d: false,
     score: 0
 };
 
 var settings = {
     intensity: 255,
     duration: 1000,
+    durationWhacked: 200,
     paused: true,
     mode: 0 // Singleplayer :   0
             // Multiplayer  :   1
 };
 
 var pressed = {
-    id: ""
+    id: "",
+    a: false,
+    b: false,
+    c: false,
+    d: false
 };
 
 var lastIndex = -1;
@@ -37,7 +46,7 @@ $(document).ready(function() {      // Document ready
 
     mole.play = function () {       // Plays one mole
         //console.log("lastIndex = " + lastIndex);
-        if (lastIndex == -1) {
+        if (lastIndex === -1) {
             mole.status = "Started";
             document.getElementById('status').getElementsByTagName('span')[0].innerText = mole.status;
             //console.log("STARTED");
@@ -46,7 +55,7 @@ $(document).ready(function() {      // Document ready
         times = 0;
         mole.randomize();
 
-        if (settings.paused == false) {
+        if (settings.paused === false) {
             setTimeout(mole.play, (Math.random() * 1200 + 500));  // Random mole appearence
         }
     };
@@ -81,7 +90,7 @@ $(document).ready(function() {      // Document ready
 
     mole.randomize = function () {
         var index = lastIndex;
-        while (lastIndex == index) {
+        while (lastIndex === index) {
             index = (Math.random() * 4) | 0;
         }
         if (lastIndex = -1) {  // First time
@@ -95,13 +104,44 @@ $(document).ready(function() {      // Document ready
     mole.pressed = function () {
         //console.log("PRESSED!!!--------------");
         if (pressed.id === mole.id && times === 0) {
-            // Whacked!!!
-            times++;
-            mole.score++;
-            console.log("Score: " + mole.score);
-            document.getElementById('score').getElementsByTagName('span')[0].innerText = mole.score;
-            console.log("WHACKED!!!-----------------------------------");
+            if (pressed.id === "a" && mole.a) {
+                app.sendMessage(" t " + "t " + settings.intensity + " " + settings.durationWhacked + "\r");
+                setTimeout(function() {
+                    app.sendMessage(" t " + "t " + settings.intensity + " " + settings.durationWhacked + "\r");
+                }, settings.durationWhacked);
+                mole.whacked();
+
+            } else if (pressed.id === "b" && mole.b) {
+                app.sendMessage(" t " + "r " + settings.intensity + " " + settings.durationWhacked + "\r");
+                setTimeout(function() {
+                    app.sendMessage(" t " + "r " + settings.intensity + " " + settings.durationWhacked + "\r");
+                }, settings.durationWhacked);
+                mole.whacked();
+
+            } else if (pressed.id === "c" && mole.c) {
+                app.sendMessage(" t " + "l " + settings.intensity + " " + settings.durationWhacked + "\r");
+                setTimeout(function() {
+                    app.sendMessage(" t " + "l " + settings.intensity + " " + settings.durationWhacked + "\r");
+                }, settings.durationWhacked);
+                mole.whacked();
+
+            } else if (pressed.id === "d" && mole.d) {
+                app.sendMessage(" t " + "h " + settings.intensity + " " + settings.durationWhacked + "\r");
+                setTimeout(function() {
+                    app.sendMessage(" t " + "h " + settings.intensity + " " + settings.durationWhacked + "\r");
+                }, settings.durationWhacked);
+                mole.whacked();
+            }
         }
+    };
+
+    mole.whacked = function () {
+        // Whacked!!!
+        times++;
+        mole.score++;
+        console.log("Score: " + mole.score);
+        document.getElementById('score').getElementsByTagName('span')[0].innerText = mole.score;
+        console.log("WHACKED!!!-----------------------------------");
     };
 
     mole.animate = function (index) {
@@ -109,33 +149,41 @@ $(document).ready(function() {      // Document ready
             app.sendMessage(" t " + "t " + settings.intensity + " " + settings.duration + "\r");
             $("#a").css("border-color", "#1aff00");
             mole.id = "a";
+            mole.a = true;
             setTimeout(function() {
                 $("#a").css("border-color", "#0b7000");
-                mole.id = "";
+                //mole.id = "";
+                mole.a = false;
             }, settings.duration + 200);
         } else if (index === 1) {
             app.sendMessage(" t " + "r " + settings.intensity + " " + settings.duration + "\r");
             $("#b").css("border-color", "#ff0b00");
             mole.id = "b";
+            mole.b = true;
             setTimeout(function() {
                 $("#b").css("border-color", "#c30800");
-                mole.id = "";
+                //mole.id = "";
+                mole.b = false;
             }, settings.duration + 200);
         } else if (index === 2) {
             app.sendMessage(" t " + "l " + settings.intensity + " " + settings.duration + "\r");
             $("#c").css("border-color", "#ffec00");
             mole.id = "c";
+            mole.c = true;
             setTimeout(function() {
                 $("#c").css("border-color", "#c3b400");
-                mole.id = "";
+                //mole.id = "";
+                mole.c = false;
             }, settings.duration + 200);
         } else if (index === 3) {
             app.sendMessage(" t " + "h " + settings.intensity + " " + settings.duration + "\r");
             $("#d").css("border-color", "#29abd0");
             mole.id = "d";
+            mole.d = true;
             setTimeout(function() {
                 $("#d").css("border-color", "#196d85");
-                mole.id = "";
+                //mole.id = "";
+                mole.d = false;
             }, settings.duration + 200);
         }
         console.log("Mole: " + mole.id);
@@ -187,22 +235,33 @@ $(document).ready(function() {      // Document ready
         app.leftShoe = false;
 
         switch(winner) {
-            case 1: pressed.id = "c";
+            case 1:
+                pressed.id = "c";
+                //console.log("Pressed C");
+                mole.pressed();
                 break;
 
-            case 2: pressed.id = "b";
+            case 2:
+                pressed.id = "b";
+                //console.log("Pressed B");
+                mole.pressed();
                 break;
 
-            case 3: pressed.id = "d";
+            case 3:
+                pressed.id = "d";
+                //console.log("Pressed D");
+                mole.pressed();
                 break;
 
-            case 4: pressed.id = "a";
+            case 4:
+                pressed.id = "a";
+                //console.log("Pressed A");
+                mole.pressed();
                 break;
 
             default:
                 break;
         }
-        mole.pressed();
     };
 
     // Listen to left shoe
@@ -249,22 +308,33 @@ $(document).ready(function() {      // Document ready
         app.leftShoe = true;
 
         switch(winner) {
-            case 1: pressed.id = "c";
+            case 1:
+                pressed.id = "a";
+                //console.log("Pressed A");
+                mole.pressed();
                 break;
 
-            case 2: pressed.id = "b";
+            case 2:
+                pressed.id = "b";
+                //console.log("Pressed B");
+                mole.pressed();
                 break;
 
-            case 3: pressed.id = "d";
+            case 3:
+                pressed.id = "c";
+                //console.log("Pressed C");
+                mole.pressed();
                 break;
 
-            case 4: pressed.id = "a";
+            case 4:
+                pressed.id = "d";
+                //console.log("Pressed D");
+                mole.pressed();
                 break;
 
             default:
                 break;
         }
-        mole.pressed();
     };
 
     // SHOE-LESS MOD

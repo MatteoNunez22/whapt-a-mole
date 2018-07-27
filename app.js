@@ -1038,7 +1038,7 @@ app.receivedMessageRight = function(data) {
             	app.zoomDir(leftVal, rightVal, heelVal, toeVal);
             }
 
-			if ($('#hapticZoomView').is(':visible')) {
+			if ($('#moleView').is(':visible')) {
             	mole.rightPress(leftVal, rightVal, heelVal, toeVal);
             }
 
@@ -1214,7 +1214,7 @@ app.receivedMessageLeft = function(data) {
             	app.zoomDir(leftVal, rightVal, heelVal, toeVal);
             }
 
-            if ($('#hapticZoomView').is(':visible')) {
+            if ($('#moleView').is(':visible')) {
                 mole.leftPress(leftVal, rightVal, heelVal, toeVal);
             }
 
@@ -2161,6 +2161,7 @@ app.goHome = function() {
 	$('#userInfo').hide();	
 	$('#pacmanView').hide();
 	$('#hapticZoomView').hide();
+	$('#moleView').hide();
 	$('#shoeButtons').show();
 
 	
