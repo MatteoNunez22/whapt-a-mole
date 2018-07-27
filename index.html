@@ -17,6 +17,7 @@
 	<style>
 		@import 'ui/css/evothings-app.css';
 		@import 'app.css';
+		@import 'simon.css';
 	</style>
 
 	<script>
@@ -119,7 +120,6 @@
 		<button id="freerunning" class="jetblack wide" onclick="app.goFreeRunning()">Manual</button>
 
 		<button class="stone wide" onclick="app.togglePacman()">Hapticman!</button>
-		<button class="jetblack wide" onclick="app.togglePacman()">Hapticman!</button>
 			<div id="pacmanView" style="display:none">
 			    <canvas id="pacmanCanvas" width="300" height="300"></canvas>
 			    <script type="text/javascript" src="Pacman.js"></script>
@@ -236,7 +236,8 @@
 			    <button id="pacPause" class="charcoal wide" onclick="pause()">Pause</button>
 			    <button id="pacResume" class="charcoal wide" onclick="resume()">Resume</button>
 			</div>
-		<button class="stone wide" onclick="app.hapticZoomStart()">Haptic Zoom</button>
+		<button class="jetblack wide" onclick="app.hapticZoomStart()">Haptic Zoom</button>
+		<button class="stone wide" onclick="mole.startContainer()">Whapt-A-Mole</button>
 
 		<input id="userCommand" type="text" value="Enter command here">
 		<button class="stone wide" onclick="app.userCommand()">Send Command</button>
@@ -420,9 +421,24 @@
 
 	<div id="moleView" style="display:none">
 		<h1>Whapt-A-Mole</h1>
-		<button class="stone wide" onclick="mole.start()">Start</button>
-		<button class="jetblack wide" onclick="mole.pause()">Pause</button>
-		<button class="stone wide" onclick="mole.restart()">Restart</button>
+		<div id="status"> Status:
+			<span>Not started</span>
+		</div>
+		<div id='score'> Score:
+			<span>0</span>
+		</div>
+		<div id="simon">
+			<div id="first"></div>
+			<div id="a"></div>
+			<div id="b"></div>
+			<div id="c"></div>
+			<div id="d"></div>
+			<div id="sixth"></div>
+		</div>
+		<span></span>
+		<button class="buttonGrp red connectFull" onclick="mole.play()">Start</button>
+		<button class="buttonGrp red half" onclick="mole.pause()">Pause</button>
+		<button class="buttonGrp red half" onclick="mole.restart()">Restart</button>
 	</div>
 
 
